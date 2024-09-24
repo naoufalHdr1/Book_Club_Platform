@@ -2,7 +2,7 @@ import requests, os, json, bleach
 from bs4 import BeautifulSoup
 from flask import render_template, redirect, url_for, flash, request, current_app, session, jsonify, abort
 from app import db
-from app.models import User, Book, Review, Club, Membership, Discussion, Event, Bookshelf
+from app.models import User, Book, Review, Club, Membership, Discussion, Event, Bookshelf, Comment, EventDiscussion
 from app.forms import RegistrationForm, LoginForm, BookForm, ReviewForm, ClubForm, DiscussionForm, EventForm, ProfileForm, BookshelfForm
 from flask_login import login_user, logout_user, current_user, login_required
 from flask import Blueprint
@@ -67,7 +67,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         membership = Membership.query.filter_by(user_id=current_user.id, club_id=kwargs['club_id']).first()
-        if membership.role != 'admin':
+        if membership.role not in ['admin', 'moderator']:
             abort(403)  # Forbidden
         return f(*args, **kwargs)
     return decorated_function
@@ -86,6 +86,7 @@ def view_clubs():
 @login_required
 def view_club(club_id):
     club = Club.query.get_or_404(club_id)
+    discussions = Discussion.query.filter_by(club_id=club_id).all()
 
     # Pagination for events
     events_page = request.args.get('events_page', 1, type=int)
@@ -102,7 +103,7 @@ def view_club(club_id):
 
     now = datetime.utcnow()  # Get current time in UTC
 
-    return render_template('view_club.html', club=club, membership=membership, members=members, events=events, events_pagination=events_pagination, now=now, total_events=total_events, past_books=past_books, current_books=current_books)
+    return render_template('view_club.html', club=club, membership=membership, members=members, events=events, events_pagination=events_pagination, now=now, total_events=total_events, discussions=discussions)
 
 
 @club_bp.route('/create_club', methods=['GET', 'POST'])
@@ -191,13 +192,70 @@ def view_members(club_id):
         # Show all members
         members = Membership.query.filter_by(club_id=club_id).paginate(page=page, per_page=10)
 
-    # Check if the current user is an admin
+    # Check if the current user is an admin or moderator
     current_user_is_admin = False
     current_user_membership = Membership.query.filter_by(club_id=club_id, user_id=current_user.id).first()
-    if current_user_membership and current_user_membership.role == 'admin':
+    if current_user_membership and current_user_membership.role in ['admin', 'moderator']:
         current_user_is_admin = True
 
     return render_template('view_members.html', club=club, members=members, current_user_is_admin = current_user_is_admin, filterr=filterr)
+
+@main.route('/club/events/<int:event_id>', methods=['GET'])
+@login_required
+def view_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    discussions = EventDiscussion.query.filter_by(event_id=event.id).all()
+    membership = Membership.query.filter_by(club_id=event.club_id, user_id=current_user.id).first()
+
+    participants_list = list(event.participants)
+    now = datetime.utcnow()
+
+    return render_template('view_event.html', event=event, discussions=discussions, membership=membership, participants_list=participants_list, now=now)
+
+@main.route('/club/events/<int:event_id>/discussion', methods=['POST'])
+@login_required
+def create_event_discussion(event_id):
+    content = request.form.get('discussion_content')
+    new_discussion = EventDiscussion(content=content, event_id=event_id, creator_id=current_user.id)
+
+    db.session.add(new_discussion)
+    db.session.commit()
+
+    flash('Discussion created successfully!', 'success')
+    return redirect(url_for('main.view_event', event_id=event_id))
+
+@main.route('/club/events/<int:event_id>/discussion/<int:discussion_id>', methods=['POST'])
+@login_required
+def delete_event_discussion(event_id, discussion_id):
+    discussion = EventDiscussion.query.get(discussion_id)
+
+    if not discussion:
+        flash('Discussion not found.', 'error')
+        return redirect(url_for('main.view_event', event_id=event_id))
+
+    # Check if the current user is the creator of the discussion
+    if discussion.creator_id != current_user.id:
+        flash('You do not have permission to delete this discussion.', 'error')
+        return redirect(url_for('main.view_event', event_id=event_id))
+
+    # Delete the discussion
+    db.session.delete(discussion)
+    db.session.commit()
+
+    flash('Discussion deleted successfully!', 'success')
+    return redirect(url_for('main.view_event', event_id=event_id))
+
+@main.route('/club/events/discussion/<int:discussion_id>/comment', methods=['POST'])
+@login_required
+def add_event_comment(discussion_id):
+    content = request.form.get('comment_content')
+    new_comment = Comment(content=content, event_discussion_id=discussion_id, creator_id=current_user.id)
+
+    db.session.add(new_comment)
+    db.session.commit()
+
+    flash('Comment added successfully!', 'success')
+    return redirect(url_for('main.view_event', event_id=new_comment.event_discussion.event_id))
 
 @main.route('/club/<int:club_id>/create_event', methods=['GET', 'POST'])
 @login_required
@@ -231,7 +289,7 @@ def join_event(event_id):
         event.participants.append(current_user)
         db.session.commit()
         flash('You have joined the event!', 'success')
-    return redirect(url_for('main.view_club', club_id=event.club_id))
+    return redirect(url_for('main.view_event', event_id=event_id))
 
 @main.route('/club/event/<int:event_id>/leave', methods=['POST'])
 @login_required
@@ -243,10 +301,48 @@ def leave_event(event_id):
         flash('You have left the event.', 'info')
     else:
         flash('You are not part of this event.', 'warning')
-    return redirect(url_for('main.view_club', club_id=event.club_id))
+    return redirect(url_for('main.view_event', event_id=event_id))
+
+@main.route('/club/<int:club_id>/discussions', methods=['POST'])
+def create_discussion(club_id):
+    if request.method == 'POST':
+        content = request.form.get('discussion_content')
+        if content:
+            new_discussion = Discussion(content=content, club_id=club_id, creator_id=current_user.id)
+            db.session.add(new_discussion)
+            db.session.commit()
+            flash('Discussion created successfully!', 'success')
+        else:
+            flash('Discussion content cannot be empty.', 'danger')
+    return redirect(url_for('main.view_club', club_id=club_id))
+
+@main.route('/club/discussions/<int:discussion_id>', methods=['POST'])
+def delete_discussion(discussion_id):
+    discussion = Discussion.query.filter_by(id=discussion_id).first()
+
+    if discussion:
+        db.session.delete(discussion)
+        db.session.commit()
+        flash('Discussion deleted successfully!', 'success')
+    else:
+        flash('Discussion not found.', 'danger')
+    return redirect(url_for('main.view_club', club_id=club_id))
+
+@main.route('/club/discussions/<int:discussion_id>/comments', methods=['POST'])
+def add_comment(discussion_id):
+    if request.method == 'POST':
+        content = request.form.get('comment_content')
+        if content:
+            new_comment = Comment(content=content, discussion_id=discussion_id, creator_id=current_user.id)
+            db.session.add(new_comment)
+            db.session.commit()
+            flash('Comment added successfully!', 'success')
+        else:
+            flash('Comment content cannot be empty.', 'danger')
+    return redirect(url_for('main.view_club', club_id=Discussion.query.get(discussion_id).club_id))
 
 # Route to promote a member to moderator or admin
-@main.route('/club/<int:club_id>/promote/<int:user_id>', methods=['POST'])
+@main.route('/club/<int:club_id>/members/promote/<int:user_id>', methods=['POST'])
 @login_required
 @admin_required
 def promote_member(club_id, user_id):
@@ -254,11 +350,11 @@ def promote_member(club_id, user_id):
     if membership and membership.role != 'admin':
         membership.role = request.form.get('role', 'moderator')  # Default is 'moderator'
         db.session.commit()
-        flash(f'Member {membership.user_id} has been promoted to {membership.role}.', 'success')
+        flash(f"Member '{membership.user.username}' has been promoted to {membership.role}.", 'success')
     return redirect(url_for('main.view_members', club_id=club_id))
 
 # Route to remove a member
-@main.route('/club/<int:club_id>/remove/<int:user_id>', methods=['POST'])
+@main.route('/club/<int:club_id>/members/remove/<int:user_id>', methods=['POST'])
 @login_required
 @admin_required
 def remove_member(club_id, user_id):
@@ -266,7 +362,7 @@ def remove_member(club_id, user_id):
     if membership:
         db.session.delete(membership)
         db.session.commit()
-        flash(f'Member {membership.user_id} has been removed.', 'success')
+        flash(f'Member {membership.user.username} has been removed.', 'success')
     return redirect(url_for('main.view_members', club_id=club_id))
     
 # 4 - User Profiles
@@ -590,6 +686,8 @@ def load_json_file(file_path):
 def books():
     # Get all bookshelves for the current user
     bookshelves = Bookshelf.query.filter_by(user_id=current_user.id).all()
+    clubs = Club.query.join(Membership).filter(Membership.user_id == current_user.id).all()
+
 
     ITEMS_PER_PAGE = 9  # Number of books to display per page
 
@@ -673,7 +771,8 @@ def books():
         query=query,
         total_items=total_items,
         total_pages=total_pages,
-        page=page
+        page=page,
+        clubs=clubs
     )
 
 @main.route('/a', methods=['GET', 'POST'])

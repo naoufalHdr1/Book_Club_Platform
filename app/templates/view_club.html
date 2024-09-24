@@ -132,103 +132,6 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.modal .btn {
-  margin: 0 5px;
-  border-radius: 0.375rem;
-  padding: 0.50rem 1.12rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.label-btn {
-  color: #000;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.label-btn:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  transform: scale(1.05); /* Slightly enlarge on hover */
-  transition: all 0.3s ease;
-}
-
-.label-btn:active {
-  background-color: #00BFFF; /* Deep sky blue for active */
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: scale(0.98); /* Slightly reduce size on active */
-}
-
-
-/* Specifically target the hover-shadow class inside the card */
-.hover-shadow:hover {
-  transform: translateY(-4px);
-}
-
-.btn-check {
-  display: none;
-}
-
-.modal .btn {
-  margin: 0 5px;
-  border-radius: 0.375rem;
-  padding: 0.50rem 1.12rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.label-btn:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  transform: scale(1.05);
-  transition: all 0.3s ease;
-}
-
-.label-btn:active {
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: scale(0.98);
-}
-
-.icon-link {
-  color: black;
-  text-decoration: none;
-  position: relative;
-  display: inline-block;
-  font-family: Arial, sans-serif; /* Ensure consistent font family */
-}
-
-.icon-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 1.5px;
-  background-color: red;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: width 0.3s ease, background-color 0.3s ease;
-}
-
-.icon-link:hover::after {
-  width: 100%;
-  background-color: red;
-}
-
-.icon-link:hover {
-  color: red;
-}
-
-.icon-link i {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.icon-link:hover i {
-  transform: translateY(-4px); /* Move the icon up */
-}
-
 #modalButton {
   width : 100% !important;
 }
@@ -242,6 +145,8 @@
 
 #book-description {
   white-space: pre-wrap; /* Preserves newlines and wraps text */
+  word-break: break-word; /* Break long words */
+  overflow-wrap: break-word; /* Ensures the long text breaks nicely */
 }
 
 .event-list {
@@ -332,178 +237,34 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow */
 }
 
-/* General Styles for Carousel */
-.carousel {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.carousel-inner {
-  padding: 0 20px;
-}
-
-.carousel-item {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 20px;
-}
-
-.carousel-item .card {
-  flex: 1 0 20%;
-  border: none;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Carousel container */
-.CarouselGroup {
-  display: flex;
-  overflow-x: auto; /* Allow horizontal scrolling */
-  scroll-snap-type: x mandatory; /* Snap to each item */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
-  padding: 10px;
-  gap: 20px; /* Space between items */
-}
-
-/* Carousel item styling */
-.CarouselGroup__item {
-  flex: 0 0 auto; /* Prevent items from shrinking */
-  width: 250px; /* Adjust as needed */
-  scroll-snap-align: center; /* Center items in the viewport */
-  list-style: none;
-}
-
-/* Ensure the book card is styled consistently */
-.book-card {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  border-radius: 8px;
-  position: relative;
-}
-
-/* Book card cover styling */
-.book-card-cover {
-  width: 100%;
-  height: 350px;
-}
-
-.book-card-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.book-card:hover .book-card-cover img {
-  transform: scale(1.02);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.book-card:hover .book-title {
-  text-decoration: underline;
-  transition: width 0.7s ease;
-}
-
-/* Book card content styling */
-.book-card-content {
-  padding-top: 15px;
-  background-color: #f9f9f9; /* Light background for content area */
-}
-
 a {
   text-decoration: none;
 }
 
-/* Title styling */
-.book-title {
-  font-size: 1.25rem; /* Slightly larger for emphasis */
-  font-weight: 600; /* Semi-bold */
-  color: #222; /* Darker color for better readability */
-  margin-bottom: 4px;
-  line-height: 1.3; /* Improved line spacing */
+.discussion-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Author styling */
-.book-author {
-  font-size: 1rem;
-  color: #555; /* Slightly lighter than title */
-  margin-bottom: 7px;
-  line-height: 1.2; /* Improved line spacing */
+.comment {
+  border-left: 3px solid #007bff;
+  padding-left: 10px;
 }
 
-/* Rating styling */
-.book-rating {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #333; /* Darker text color */
+.btn-outline-primary {
+  border-color: #007bff;
 }
 
-.rating-stars {
-  display: flex;
-  align-items: center;
-  margin-right: 10px; /* Space between stars and rating value */
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.2s ease;
 }
 
-.rating-value {
-  font-weight: 600; /* Semi-bold for emphasis */
-  color: #f39c12; /* Gold color for rating value */
-  margin-right: 5px; /* Space between rating value and count */
-}
-
-.rating-count {
-  color: #777; /* Lighter color for count */
-}
-
-.hover-shadow {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-img-top {
-    border-top-left-radius: calc(0.375rem - 1px);
-    border-top-right-radius: calc(0.375rem - 1px);
-    width: 233px;
-    height: 350px;
-}
-
-.card-img-top {
-    transition: transform 0.5s ease;
-}
-
-.card:hover .card-img-top {
-    transform: scale(1.03);
-}
-
-/* General container styling */
-.container {
-  max-width: 1200px;
-  margin: auto;
-}
-
-.btn-check {
-  display: none; /* Hide the default checkbox */
-}
-
-/* Specifically target the hover-shadow class inside the card */
-.hover-shadow:hover {
-  transform: translateY(-4px);
-}
 
 {% endblock %}
 
 {% block content %}
-
-<div class="alert alert-info">
-    <div class="d-none d-xl-block font-weight-bold">X-LARGE (XL)</div>
-    <div class="d-none d-lg-block d-xl-none font-weight-bold">LARGE (LG)</div>
-    <div class="d-none d-md-block d-lg-none font-weight-bold">MEDIUM (M)</div>
-    <div class="d-none d-sm-block d-md-none font-weight-bold">SMALL (SM)</div>
-    <div class="d-block d-sm-none alert font-weight-bold">X-SMALL (Default)</div>
-</div>
-
 
 <div class="container my-5">
   <div class="row gx-md-3 gx-lg-4">
@@ -590,9 +351,9 @@ a {
           <div class="row px-4">
             {% for member in members[:6] %}
               <div class="col-4 col-lg-2 mb-3">
-                <div class="card border-0">
+                <div class="card border-0 bg-light">
 	          <a href="{{ url_for('main.view_profile', username=member.user.username) }}" class="position-relative">
-                    <img src="{{ member.user.profile_picture }}" class="card-img-top" alt="{{ member.username }}" style="height: 110px; min-height: 110px;width: 75px; object-fit: cover; position: relative;">
+                    <img src="{{ member.user.profile_picture }}" class="card-img-top" alt="{{ member.username }}" style="height: 110px; min-height: 110px;width: 86px; object-fit: cover; position: relative;">
                     {% if member.role == 'admin' %}
                       <span class="badge bg-info text-light position-absolute bottom-0 start-0" style="border-radius: 0px 10px 10px 0px;">Admin</span>
                     {% elif member.role == 'moderator' %}
@@ -610,10 +371,11 @@ a {
           </div>
           <!-- "More members..." link -->
           <div class="text-end mb-4">
-            <button class="btn btn-sm" id="show-more-btn">
-              <a href="{{ url_for('main.view_members', club_id=club.id) }}" style="text-decoration:none; color:white;">More Members...
-	      </a>
-            </button>
+            <a href="{{ url_for('main.view_members', club_id=club.id) }}" style="text-decoration:none; color:white;">More Members...
+              <button class="btn btn-sm" id="show-more-btn">
+                More Members...
+              </button>
+	    </a>
           </div>
         </div>
 
@@ -651,7 +413,7 @@ a {
 
         	<div class="text-end">
           	  <!-- View Event Button -->
-          	  <a href="" class="btn btn-outline-secondary btn-sm"><i class="bi bi-eye"></i> View Event</a>
+		  <a href="{{ url_for('main.view_event', event_id=event.id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-eye"></i> View Event</a>
 
           	  <!-- Join/Leave Event Buttons -->
 		  {% if membership %}
@@ -670,7 +432,7 @@ a {
     	    {% endfor %}
   	  </div>
   	  {% if events|length == 0 %}
-    	    <p class="text-muted">No upcoming events at the moment.</p>
+    	    <p class="text-muted px-5">No upcoming events at the moment.</p>
   	  {% endif %}
 	</div>
 
@@ -702,59 +464,85 @@ a {
         <!-- Create Event Link -->
 	{% if membership %}
           <div class="text-end mb-4">
-            <button class="btn btn-sm" id="show-more-btn">
-	      <a href="{{ url_for('main.create_event', club_id=club.id) }}" style="text-decoration:none; color:white;"><i class="bi bi-plus-circle"></i> Create Event
-              </a>
-            </button>
+            <a href="{{ url_for('main.create_event', club_id=club.id) }}" style="text-decoration:none; color:white;">
+              <button class="btn btn-sm" id="show-more-btn">
+	        <i class="bi bi-plus-circle"></i> Create Event
+              </button>
+            </a>
           </div>
 	{% endif %}
 
-	<!-- Current Books Section -->
-        <div class="col-12">
-	  <h2 class="text-muted fs-3 px-4">Current Books</h2><hr>
-          {% if current_books %}
-	    <!-- Carousel Wrapper -->
-            <div id="booksCarousel" class="carousel slide" data-bs-ride="carousel">
-              <!-- Carousel inner -->
-              <ul class="CarouselGroup" data-testid="items">
-                {% for book in current_books %}
-                  <li class="CarouselGroup__item genre-scroll">
-                    <div class="book-card">
-                      <a class="BookCard__clickCardTarget BookCard__interactive BookCard__block" href="{{ url_for('club_bp.view_book', book_id=book['id']) }}" tabindex="0">
-                        <div class="book-card-cover">
-		          <img src="{{ book.cover_image}}" alt="{{ book.title }}">
-                        </div>
-                        <div class="book-card-content bg-white shadow-md">
-                          <div class="book-title">
-		            {{ book.title }}
-		    	  </div>
-                          <div class="book-author">
-			    <p class="text-muted medium mb-0" style="background-color: white;"><i class="bi bi-person"></i>
-                              {{ book.author }}
-              		    </p>
-		   	  </div>
-                          <div class="book-rating">
-                            <div class="rating-stars">
-			      <i class="bi bi-star-fill text-warning fs-3"></i>
-                            </div>
-                            <div class="rating-value">
-			      {{ book.get('rating', '4.3') }}
-			    </div>
-                            <div class="rating-count">
-			      {{ book.get('count', '26.4K') }}
-			    </div>
-              		  </div>
-                        </div>
-                      </a>
-                    </div>
-                  </li>
-                {% endfor %}
-              </ul>
-            </div>
-	  {% else %}
-            <p class="text-muted px-5">No Related Books Found!</p>
-          {% endif %}
-	</div>
+      <!-- Discussion Section -->
+        <div class="col-12 mb-5">
+	  <h2 class="text-muted fs-3 px-4">Discussions ({{ discussions|length }})</h2><hr>
+
+ 	   <!-- Add Discussion Form -->
+	   {% if membership %}
+  	     <div class="mb-4 px-4">
+    	       <form action="{{ url_for('main.create_discussion', club_id=club.id) }}" method="POST">
+      	         <div class="form-group">
+        	   <textarea class="form-control rounded-3 shadow-sm mb-3" name="discussion_content" rows="3" placeholder="Share your thoughts or suggestions..." required></textarea>
+      	         </div>
+		 <div class="text-end mb-5">
+            	   <button type="submit" class="btn btn-sm" id="show-more-btn">
+              	     <a style="text-decoration:none; color:white;"><i class="bi bi-plus-circle"></i> Create Discussion</a>
+            	   </button>
+      	         </div>
+    	       </form>
+  	     </div>
+	   {% endif  %}
+
+  	   <!-- List Existing Discussions -->
+  	   <div class="discussion-list px-4">
+   	     {% for discussion in discussions %}
+      	       <div class="discussion-card mb-4 p-3 rounded-3 shadow-sm bg-white border-light">
+        	 <div class="d-flex justify-content-between align-items-center mb-2">
+		   <a href="{{ url_for('main.view_profile', username=discussion.creator.username) }}">
+          	     <h5 class="text-primary fw-bold">{{ discussion.creator.username }}</h5>
+		   </a>
+          	   <small class="text-muted">{{ discussion.created_at.strftime('%b %d, %Y') }}</small>
+        	 </div>
+        	 <p class="mb-3">{{ discussion.content }}</p>
+
+        	 <!-- View Comments Button -->
+        	 <div class="text-end">
+		   <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#comments-{{ discussion.id }}"><i class="bi bi-eye"></i> View Comments</button>
+
+		   <!-- Delete Button (only for admin) -->
+		   {% if membership.role == "admin" or current_user.id == discussion.creator_id %}
+                     <form action="{{ url_for('main.delete_discussion', discussion_id=discussion.id) }}" method="POST" class="d-inline">
+		       <button class="btn btn-outline-danger btn-sm" type="submit" onclick="return confirm('Are you sure you want to delete this discussion?');"><i class="bi bi-trash"></i> Delete</button>
+          	     </form>
+		   {% endif %}
+        	 </div>
+
+        	 <!-- Comments Section -->
+        	 <div class="collapse mt-3" id="comments-{{ discussion.id }}">
+          	   <div class="comment-list">
+            	     {% for comment in discussion.comments %}
+              	       <div class="comment mb-2 p-2 rounded bg-light">
+                         <strong class="text-dark">{{ comment.creator.username }}:</strong> {{ comment.content }}
+              	       </div>
+            	     {% endfor %}
+          	   </div>
+
+        	   <!-- Add Comment Form -->
+	           {% if membership %}
+          	     <form action="{{ url_for('main.add_comment', discussion_id=discussion.id) }}" method="POST" class="mt-3">
+            	       <div class="input-group">
+              	         <input type="text" class="form-control rounded-3 shadow-sm" name="comment_content" placeholder="Add a comment..." required>
+              	           <button class="btn btn-outline-secondary shadow-sm" type="submit">Comment</button>
+              	       </div>
+            	     </form>
+		   {% endif %}
+		 </div>
+      	       </div>
+    	     {% else %}
+      	       <p class="text-muted">No discussions yet.</p>
+    	     {% endfor %}
+  	   </div>
+	 </div>
+
 
       </div>
     </div>

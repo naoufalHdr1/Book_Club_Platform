@@ -24,13 +24,6 @@ class User(UserMixin, db.Model):
     bookshelves = db.relationship('Bookshelf', backref='owner', lazy=True, cascade="all, delete-orphan")
     favorite_books = db.Column(MutableList.as_mutable(PickleType), default=[])
 
-    """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if not self.bookshelves:
-            self.create_default_bookshelves()
-    """
-
     def create_default_bookshelves(self):
         # Define the default bookshelf names and corresponding descriptions
         default_bookshelves = [
@@ -70,28 +63,6 @@ class Bookshelf(db.Model):
         return f'<Bookshelf {self.name}>'
 
 class Book(db.Model):
-    """
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    author = db.Column(db.String(100), nullable=False)
-    genre = db.Column(db.String(50), nullable=False)
-    cover_image_url = db.Column(db.String(200), default="https://img.freepik.com/premium-photo/realistic-3d-book-cover-mockup-template-authors-publishers_1281490-5239.jpg", nullable=True)
-    description = db.Column(db.Text, nullable=True)
-
-    reviews = db.relationship('Review', backref='book', lazy=True, cascade="all, delete-orphan")
-
-
-    def __repr__(self):
-        return f'<Book {self.title}>'
-
-    def average_rating(self):
-        if not self.reviews:
-            return 0
-        return sum([review.rating for review in self.reviews]) / len(self.reviews)
-
-    def review_count(self):
-        return len(self.reviews)
-    """
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.String(30), nullable=False)
     year = db.Column(db.Integer, nullable=False)
@@ -147,13 +118,39 @@ class Membership(db.Model):
 
 class Discussion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    club_id = db.Column(db.Integer, db.ForeignKey('club.id'), nullable=False)
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.String(500), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
-    # author = db.relationship('User', backref='discussions')
+    club_id = db.Column(db.Integer, db.ForeignKey('club.id'), nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relationships
+    club = db.relationship('Club', backref='discussions')
+    creator = db.relationship('User', backref='discussions')
+    comments = db.relationship('Comment', backref='discussion', lazy=True, cascade="all, delete-orphan")
+
+class EventDiscussion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(500), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relationships
+    event = db.relationship('Event', backref='event_discussions')
+    creator = db.relationship('User', backref='event_discussions')
+    comments = db.relationship('Comment', backref='event_discussion', lazy=True, cascade="all, delete-orphan")
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(500), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    discussion_id = db.Column(db.Integer, db.ForeignKey('discussion.id'), nullable=True)  # For club discussions
+    event_discussion_id = db.Column(db.Integer, db.ForeignKey('event_discussion.id'), nullable=True)  # For event discussions
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relationships
+    creator = db.relationship('User', backref='comments')
+
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)

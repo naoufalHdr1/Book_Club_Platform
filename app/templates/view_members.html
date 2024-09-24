@@ -116,37 +116,54 @@
     <!-- Members List -->
     <div class="list-group">
         {% for member in members.items %}
-        <div class="list-group-item py-3 d-flex align-items-center border-0 shadow-sm mb-3 rounded">
+ 	  <div class="list-group-item py-3 d-flex flex-column flex-md-row align-items-start border-0 shadow-sm mb-3 rounded">
+   	  
             <!-- Profile Picture -->
-            <a href="{{ url_for('main.view_profile', username=member.user.usernama) }}">
-                <img src="{{ member.user.profile_picture }}" class="rounded-circle shadow-sm" alt="{{ member.user.username }}'s profile picture" style="width: 60px; height: 60px; margin-right: 15px;">
-            </a>
+    	    <a href="{{ url_for('main.view_profile', username=member.user.username) }}">
+              <img src="{{ member.user.profile_picture }}" class="rounded-circle shadow-sm" alt="{{ member.user.username }}'s profile picture" style="width: 60px; height: 60px; margin-right: 15px;">
+    	    </a>
 
-            <!-- Member Info: Username, Role Badge, and Join Date -->
-            <div>
-                <div class="d-flex align-items-center">
-                    <!-- Username -->
-                    <a href="{{ url_for('main.view_profile', username=member.user.username) }}" class="text-decoration-none fw-bold username-hover text-dark">
-                        {{ member.user.username }}
-                    </a>
-                    <!-- Role Badge -->
-                    {% if member.role == 'admin' %}
-                    <span class="badge bg-info text-light ms-2 py-1 px-2" style="font-size: 0.8rem;">Admin</span>
-                    {% elif member.role == 'moderator' %}
-                    <span class="badge bg-warning text-dark ms-2 py-1 px-2" style="font-size: 0.8rem;">Moderator</span>
-                    {% endif %}
-                </div>
-                <!-- Joined Date -->
-                <small class="text-muted">Joined: {{ member.joined_at.strftime('%b %Y') }}</small>
-            </div>
+    	    <!-- Member Info: Username, Role Badge, and Join Date -->
+    	    <div class="flex-grow-1">
+              <div class="d-flex align-items-center">
 
-            <!-- Bookshelves Button -->
-            <div class="ms-auto">
-                <a href="{{ url_for('main.view_bookshelves', username=member.user.username, bookshelf_name='Read') }}" class="btn btn-outline-secondary btn-sm">
-                    View Bookshelves
-                </a>
-            </div>
-        </div>
+                <!-- Username -->
+                <a href="{{ url_for('main.view_profile', username=member.user.username) }}" class="text-decoration-none fw-bold username-hover text-dark">
+                  {{ member.user.username }}
+            	</a>
+            
+		<!-- Role Badge -->
+                {% if member.role == 'admin' %}
+                  <span class="badge bg-info text-light ms-2 py-1 px-2" style="font-size: 0.8rem;">Admin</span>
+            	{% elif member.role == 'moderator' %}
+            	  <span class="badge bg-warning text-dark ms-2 py-1 px-2" style="font-size: 0.8rem;">Moderator</span>
+            	{% endif %}
+              </div>
+
+       	      <!-- Joined Date -->
+              <small class="text-muted">Joined: {{ member.joined_at.strftime('%b %d, %Y') }}</small>
+    	    </div>
+
+    	    <!-- Promote and Remove Buttons -->
+	    {% if member.role != "admin" and current_user_is_admin and member.user.id != current_user.id %}
+    	      <div class="mt-2 mt-md-0 ms-md-auto d-flex align-items-center">
+
+                <!-- Promote Button -->
+                <form action="{{ url_for('main.promote_member', club_id=club.id, user_id=member.user.id) }}" method="POST" style="display:inline;">
+                  <select name="role" class="form-select form-select-sm" style="display:inline; width: auto;">
+                    <option value="moderator" {% if member.role == 'moderator' %}selected{% endif %}>Moderator</option>
+                    <option value="admin" {% if member.role == 'admin' %}selected{% endif %}>Admin</option>
+                  </select>
+                  <button type="submit" class="btn btn-outline-success btn-sm align-self-center">Promote</button>
+                </form>
+
+                <!-- Remove Button -->
+                <form action="{{ url_for('main.remove_member', club_id=club.id, user_id=member.user.id) }}" method="POST" style="display:inline; margin-left: 5px;">
+                  <button type="submit" class="btn btn-outline-danger btn-sm align-self-center">Remove</button>
+                </form>
+    	      </div>
+	    {% endif %}
+	  </div>
         {% endfor %}
     </div>
 
@@ -173,5 +190,6 @@
         </nav>
     </div>
 </div>
+
 {% endblock %}
 
