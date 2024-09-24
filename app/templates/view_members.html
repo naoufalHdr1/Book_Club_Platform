@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+/* Member list styling */
+.list-group-item {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    transition: box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Hover effect */
+}
+
+/* Profile Picture */
+.list-group-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for profile pic */
+    transition: transform 0.3s ease;
+}
+
+.list-group-item img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Username with hover effect */
+.list-group-item a.username-hover:hover {
+    color: #007bff !important;
+    text-decoration: underline !important;
+}
+
+/* Role badges */
+.badge {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    text-transform: capitalize;
+}
+
+.badge-admin {
+    background-color: #dc3545; /* Red for Admin */
+}
+
+.badge-moderator {
+    background-color: #ffc107; /* Yellow for Moderator */
+    color: #000;
+}
+
+/* Bookshelves button */
+.btn-outline-secondary {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Pagination styling */
+.pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+  margin-top: 20px; /* Reduced margin */
+  gap: 0.3rem; /* Reduced gap */
+}
+
+.pagination .page-item .page-link {
+  color: #5a5a5a;
+  font-size: 0.9rem; /* Smaller font size */
+  padding: 5px 10px; /* Reduced padding */
+  border-radius: 5px; /* Smaller border radius */
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+  background-color: #ffffff;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #e1e1e1;
+  border-color: #b0b0b0;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid transparent;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+}
+
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Header with filters -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Members of {{ club.name }}</h2>
+        <div class="btn-group" role="group">
+            <a href="{{ url_for('main.view_members', club_id=club.id, filter='all') }}" class="btn btn-outline-primary {% if filter == 'all' %}active{% endif %}">
+                All
+            </a>
+            <a href="{{ url_for('main.view_members', club_id=club.id, filter='moderators') }}" class="btn btn-outline-primary {% if filter == 'moderators' %}active{% endif %}">
+                Moderators
+            </a>
+        </div>
+    </div>
+
+    <!-- Members List -->
+    <div class="list-group">
+        {% for member in members.items %}
+        <div class="list-group-item py-3 d-flex align-items-center border-0 shadow-sm mb-3 rounded">
+            <!-- Profile Picture -->
+            <a href="{{ url_for('main.view_profile', username=member.user.usernama) }}">
+                <img src="{{ member.user.profile_picture }}" class="rounded-circle shadow-sm" alt="{{ member.user.username }}'s profile picture" style="width: 60px; height: 60px; margin-right: 15px;">
+            </a>
+
+            <!-- Member Info: Username, Role Badge, and Join Date -->
+            <div>
+                <div class="d-flex align-items-center">
+                    <!-- Username -->
+                    <a href="{{ url_for('main.view_profile', username=member.user.username) }}" class="text-decoration-none fw-bold username-hover text-dark">
+                        {{ member.user.username }}
+                    </a>
+                    <!-- Role Badge -->
+                    {% if member.role == 'admin' %}
+                    <span class="badge bg-info text-light ms-2 py-1 px-2" style="font-size: 0.8rem;">Admin</span>
+                    {% elif member.role == 'moderator' %}
+                    <span class="badge bg-warning text-dark ms-2 py-1 px-2" style="font-size: 0.8rem;">Moderator</span>
+                    {% endif %}
+                </div>
+                <!-- Joined Date -->
+                <small class="text-muted">Joined: {{ member.joined_at.strftime('%b %Y') }}</small>
+            </div>
+
+            <!-- Bookshelves Button -->
+            <div class="ms-auto">
+                <a href="{{ url_for('main.view_bookshelves', username=member.user.username, bookshelf_name='Read') }}" class="btn btn-outline-secondary btn-sm">
+                    View Bookshelves
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination pagination-lg">
+                {% if members.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.view_members', club_id=club.id, page=members.prev_num, filter=filter) }}">&laquo; Previous</a>
+                </li>
+                {% endif %}
+                {% for p in members.iter_pages() %}
+                <li class="page-item {% if p == members.page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('main.view_members', club_id=club.id, page=p, filter=filter) }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% if members.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.view_members', club_id=club.id, page=members.next_num, filter=filter) }}">Next &raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+

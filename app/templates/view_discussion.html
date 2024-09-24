@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-gradient-primary-to-secondary text-white text-center py-4">
+                    <h1 class="fw-bold text-primary">{{ discussion.title }}</h1>
+                </div>
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ discussion.author.profile_picture }}" alt="{{ discussion.author.username }}" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+                            <div>
+                                <h5 class="mb-0 fw-bold">{{ discussion.author.username }}</h5>
+                                <p class="text-muted mb-0">{{ discussion.created_at.strftime('%A, %B %d, %Y at %H:%M') }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-primary rounded-pill px-4 py-2">Follow</button>
+                        </div>
+                    </div>
+
+                    <p class="lead">{{ discussion.content }}</p>
+
+                    <hr class="my-5">
+
+                    <h4 class="mb-4 text-uppercase text-primary">Comments</h4>
+                    {% if discussion.comments %}
+                        <ul class="list-group list-group-flush rounded shadow-sm">
+                            {% for comment in discussion.comments %}
+                                <li class="list-group-item py-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="{{ comment.author.profile_picture }}" alt="{{ comment.author.username }}" class="rounded-circle me-3" style="width: 40px; height: 40px;">
+                                        <div>
+                                            <h6 class="fw-bold mb-0">{{ comment.author.username }}</h6>
+                                            <p class="text-muted mb-0">{{ comment.created_at.strftime('%A, %B %d, %Y at %H:%M') }}</p>
+                                        </div>
+                                    </div>
+                                    <p>{{ comment.content }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No comments yet. Be the first to comment!</p>
+                    {% endif %}
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

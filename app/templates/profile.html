@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+{% block style %}
+body {
+    background-color: #f0f2f5;
+    font-family: 'Arial', sans-serif;
+}
+
+.profile-card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+}
+
+.profile-card .card-img-top {
+    border-bottom: 2px solid #007bff;
+}
+
+.profile-card .card-body {
+    background-color: #ffffff;
+    padding: 1.5rem;
+}
+
+.profile-card .card-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.profile-card .card-text {
+    color: #6c757d;
+}
+
+.profile-card .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.profile-card .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.bookshelf-item {
+    transition: all 0.3s ease;
+}
+
+.bookshelf-item:hover {
+    background-color: aliceblue;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Style for the show more functionality */
+.bookshelf-description {
+    display: inline;
+}
+
+.bookshelf-description.full-text {
+    display: none;
+}
+
+.show-more-btn {
+    color: #007bff;
+    cursor: pointer;
+}
+
+.show-more-btn:hover {
+    text-decoration: underline;
+}
+
+.club-section .club-card {
+    transition: all 0.3s ease;
+    border-radius: 15px;
+}
+
+.club-section .club-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.club-section .card-body {
+    padding: 1.5rem;
+}
+
+.club-section .card-body .fw-bold {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.club-section .card-body .text-muted {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.club-section .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.club-section .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .club-section .club-card {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* General Styles for Carousel */
+.carousel {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.carousel-inner {
+  padding: 0 20px;
+}
+
+.carousel-item {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+.carousel-item .card {
+  flex: 1 0 20%;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Carousel container */
+.CarouselGroup {
+  display: flex;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  scroll-snap-type: x mandatory; /* Snap to each item */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  padding: 10px;
+  gap: 20px; /* Space between items */
+}
+
+/* Carousel item styling */
+.CarouselGroup__item {
+  flex: 0 0 auto; /* Prevent items from shrinking */
+  width: 250px; /* Adjust as needed */
+  scroll-snap-align: center; /* Center items in the viewport */
+  list-style: none;
+}
+
+/* Ensure the book card is styled consistently */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Book card cover styling */
+.book-card-cover {
+  width: 100%;
+  height: 350px;
+}
+
+.book-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card:hover .book-card-cover img {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.book-card:hover .book-title {
+  text-decoration: underline;
+  transition: width 0.7s ease;
+}
+
+/* Book card content styling */
+.book-card-content {
+  padding-top: 15px;
+  background-color: #f9f9f9; /* Light background for content area */
+}
+
+/* Link styling */
+a {
+  text-decoration: none;
+}
+
+/* Title styling */
+.book-title {
+  font-size: 1.25rem; /* Slightly larger for emphasis */
+  font-weight: 600; /* Semi-bold */
+  color: #222; /* Darker color for better readability */
+  margin-bottom: 4px;
+  line-height: 1.3; /* Improved line spacing */
+}
+
+/* Author styling */
+.book-author {
+  font-size: 1rem;
+  color: #555; /* Slightly lighter than title */
+  margin-bottom: 7px;
+  line-height: 1.2; /* Improved line spacing */
+}
+
+/* Rating styling */
+.book-rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333; /* Darker text color */
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  margin-right: 10px; /* Space between stars and rating value */
+}
+
+.rating-value {
+  font-weight: 600; /* Semi-bold for emphasis */
+  color: #f39c12; /* Gold color for rating value */
+  margin-right: 5px; /* Space between rating value and count */
+}
+
+.rating-count {
+  color: #777; /* Lighter color for count */
+}
+
+
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Profile Sidebar -->
+            <div class="col-md-4 mb-3">
+                <div class="card profile-card">
+                    <img src="{{ user.profile_picture or url_for('static', filename='default-profile.png') }}" class="card-img-top" alt="Profile Picture">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ user.username }}</h5>
+                        <p class="card-text">{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="card-text">{{ user.email }}</p>
+			{% if user.id == current_user.id%}
+                          <a href="{{ url_for('main.edit_profile', username=user.username) }}" class="btn btn-outline-primary">Edit Profile</a>
+			{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Main Content -->
+            <div class="col-md-8">
+                <div class="card shadow-lg border-0 rounded-5 mb-5">
+                  <div class="card-body p-4">
+		    <div class="bookshelf-section mb-4">
+                      <h3 class="fw-bold mb-0 fs-3 fw-bold text-dark p-3">Bookshelves ({{ user.bookshelves|length }})</h3><hr>
+  	              <ul class="list-group list-group-flush">
+      		        {% if user.bookshelves %}
+                          {% for bookshelf in user.bookshelves %}
+			    <a href="{{ url_for('main.view_bookshelves', username=user.username, bookshelf_name=bookshelf.name) }}" class="list-group-item list-group-item-action bookshelf-item">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-1 text-primary">{{ bookshelf.name }}</h5>
+                                <small class="text-muted">{{ bookshelf.created_at.strftime('%b %d, %H:%M') }}</small>
+                              </div>
+                              <p class="mb-1">
+                                <span class="bookshelf-description short-text text-secondary">
+                                  {{ bookshelf.description[:100] }}{% if bookshelf.description|length > 100 %}...{% endif %}
+                                </span>
+                                <span class="bookshelf-description full-text text-secondary">
+                                  {{ bookshelf.description }}
+                                </span>
+                                {% if bookshelf.description|length > 100 %}
+                                  <p class="show-more-btn text-secondary fw-bold" data-state="short">Show more</p>
+                                {% endif %}
+			      </p>
+                            </a>
+                          {% endfor %}
+                        {% else %}
+                          <p class="text-muted px-4">No Bookshelves found.</p>
+                        {% endif %}
+                      </ul>
+                      <div class="mt-4 d-flex justify-content-end mt-4">
+			{% if user.id == current_user.id%}
+	  	          <a href="{{ url_for('main.create_bookshelf') }}" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i> Create Bookshelf</a>
+			{% endif %}
+                      </div>
+	  	    </div>
+	        
+		    <div class="club-section">
+		      <h3 class="fw-bold mb-0 fs-3 fw-bold text-dark p-3">Clubs ({{ clubs|length }})</h3><hr>
+                      <div class="row">
+                        {% if clubs %}
+                          {% for club in clubs %}
+                            <div class="col-xl-4 col-lg-6">
+                              <div class="card club-card shadow-sm mb-3">
+                                <div class="card-body">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                      <p class="fw-bold mb-1 text-primary">{{ club.name }}</p>
+                   	              <p class="text-muted mb-0">Created by {{ club.created_by }}</p>
+                		    </div>
+                		    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('main.view_club', club_id=club.id) }}" role="button">View</a>
+              			  </div>
+            			</div>
+          	              </div>
+        		    </div>
+      			  {% endfor %}
+    			{% else %}
+      		          <p class="text-muted px-4">No clubs joined.</p>
+    		        {% endif %}
+  		      </div>
+		    </div>
+
+		    <div class="favorite-books-section">
+		      <h3 class="fw-bold mb-0 fs-3 fw-bold text-dark p-3">Favorite Books ({{ favorite_books|length }})</h3><hr>
+                      {% if favorite_books %}
+		        <!-- Carousel Wrapper -->
+                        <div id="booksCarousel" class="carousel slide" data-bs-ride="carousel">
+                          <!-- Carousel inner -->
+                          <ul class="CarouselGroup" data-testid="items">
+                            {% for book in favorite_books %}
+                              <li class="CarouselGroup__item">
+                                <div class="book-card">
+                                  <a class="BookCard__clickCardTarget BookCard__interactive BookCard__block" href="{{ url_for('club_bp.view_book', book_id=book.get('book_id')) }}" tabindex="0">
+                                    <div class="book-card-cover">
+			              <img src="{{ book.get('thumbnail') or url_for('static', filename='default-book-cover.jpg') }}" alt=" {{ book.get('title')  }}">
+
+                                    </div>
+                                    <div class="book-card-content">
+                                      <div class="book-title">{{ book.get('title') }}</div>
+                                      <div class="book-author">{{ book.get('author') }}</div>
+                                      <div class="book-rating">
+                                        <div class="rating-stars">
+                                          <!-- Add stars SVG or icon here -->
+                                        </div>
+                                        <div class="rating-value">{{ book.rating }}</div>
+                                        <div class="rating-count">{{ book.rating_count }}</div>
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% else %}
+                        <p class="text-muted px-4">No favorite books added.</p>
+                      {% endif %}
+                    </div>
+
+
+		</div> <!-- card -->
+	    </div> <!-- col  -->
+	</div> <!-- row  -->
+    </div> <!-- container  -->
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const showMoreButtons = document.querySelectorAll('.show-more-btn');
+        showMoreButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+            const parent = button.parentElement;
+            const shortText = parent.querySelector('.short-text');
+            const fullText = parent.querySelector('.full-text');
+
+            if (button.getAttribute('data-state') === 'short') {
+              shortText.style.display = 'none';
+              fullText.style.display = 'inline';
+              button.textContent = 'Show less';
+              button.setAttribute('data-state', 'full');
+            } else {
+              shortText.style.display = 'inline';
+              fullText.style.display = 'none';
+              button.textContent = 'Show more';
+              button.setAttribute('data-state', 'short');
+            }
+          });
+        });
+      });
+    </script>
+
+{% endblock %}
+

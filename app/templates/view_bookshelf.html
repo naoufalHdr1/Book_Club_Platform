@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block style %}
+  /* Customizing the look of the page */
+  .bg-gradient-white {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-bottom: none;
+  }
+
+  /* Override the default bg-primary and active class styles */
+  .list-group-item-action.active {
+    background-color: aliceblue !important; /* Light blue background for active state */
+    color: #0056b3 !important; /* Darker blue text */
+    font-weight: bold;
+    border: none;
+  }
+
+  /* Style for non-active items */
+  .list-group-item {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  /* Hover state for non-active items */
+  .list-group-item:hover {
+    background-color: #f1f1f1;
+    color: #3a7bd5;
+  }
+
+    /* General styling for the card */
+  .card {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  /* Header styling */
+  .card-header {
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  /* Table styling */
+  .table img {
+    width: 65px;
+    height: 105px;
+    object-fit: cover;
+    }
+.badge {
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.badge:hover {
+    background-color: white !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.badge a {
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.badge:hover a {
+    text-decoration: underline;
+    color: #333;
+}
+
+.remove-link i{
+    transition: opacity 0.2s;
+}
+
+.remove-link:hover i {
+    text-decoration: underline;
+    opacity: 0.75;
+}
+
+/* Responsive Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+  margin-top: 40px;
+  gap: 0.5rem;
+}
+
+/* Responsive Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+  margin-top: 20px; /* Reduced margin */
+  gap: 0.3rem; /* Reduced gap */
+}
+
+.pagination .page-item .page-link {
+  color: #5a5a5a;
+  font-size: 0.9rem; /* Smaller font size */
+  padding: 5px 10px; /* Reduced padding */
+  border-radius: 5px; /* Smaller border radius */
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+  background-color: #ffffff;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #e1e1e1;
+  border-color: #b0b0b0;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid transparent;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+}
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- Left Column: Bookshelves List -->
+    <div class="col-12 col-md-4 mb-4">
+      <div class="card border-0">
+        <div class="card-header bg-white text-dark-emphasis text-left py-4">
+          <h3 class="mb-0">Bookshelves</h3>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for bookshelf in bookshelves %}
+            <a href="{{ url_for('main.view_bookshelves', username=username, bookshelf_name=bookshelf.name) }}"
+               class="list-group-item list-group-item-action {{ 'active bg-primary text-white' if selected_shelf.id == bookshelf.id else '' }} d-flex align-items-center">
+              <i class="bi bi-bookmark-fill me-2"></i>
+	      <span class="text-truncate">{{ bookshelf.name }} ({{ bookshelf.books|length }})</span>
+            </a>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Column: Books Table -->
+    <div class="col-12 col-md-8">
+      {% if books %}
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-light text-dark-emphasis text-left py-4">
+		<h3 class="mb-0">Books in "{{ selected_shelf.name }}" ({{ selected_shelf.books|length }})</h3>
+        </div>
+        <div class="card-body p-4">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="">
+                <tr>
+                  <th scope="col">Cover</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Year</th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider text-light-emphasis">
+                {% for book in books %}
+                <tr>
+		  <td><img src="{{ book['thumbnail'] }}" alt="{{ book['title']  }}"></img></td>
+                  <td>{{ book['title'] }}</td>
+                  <td>{{ book['author'] }}</td>
+		  <td>{{ book['published_date'] }}</td>
+		  <td>
+                    <div class="badge bg-info text-black rounded-pill"><i class="bi bi-eye"></i><a href="{{ url_for('club_bp.view_book', book_id=book['book_id']) }}"> view</a>
+		    </div>
+		  </td>
+		    {% if username == current_user.username %}
+		    <td>
+	              <a class="remove-link text-danger" href="javascript:void(0);" onclick="removeBook('{{ book['book_id'] }}', '{{ selected_shelf.name }}');"><i class="bi bi-trash fs-5"></i></a>
+		  </td>
+		    {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+	  <!-- Pagination Controls -->
+	  <nav aria-label="Page navigation">
+	    <ul class="pagination justify-content-center">
+              {% if current_page > 1 %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ url_for('main.view_bookshelves', username=username, bookshelf_name=selected_shelf.name, page=current_page - 1) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+              {% for page_num in range(1, total_pages + 1) %}
+                <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                  <a class="page-link" href="{{ url_for('main.view_bookshelves', username=username, bookshelf_name=selected_shelf.name, page=page_num) }}">{{ page_num }}</a>
+                </li>
+              {% endfor %}
+              {% if current_page < total_pages %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ url_for('main.view_bookshelves', username=username, bookshelf_name=selected_shelf.name, page=current_page + 1) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+      {% else %}
+      <div class="card shadow-lg border-0 text-center">
+        <div class="card-body">
+          <h5 class="text-muted">No books found</h5>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+
+function removeBook(book_id, shelf_name) {
+  if (confirm('Are you sure you want to remove this book from the shelf?')) {
+    fetch('{{ url_for("main.remove_from_shelf") }}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        book_id: book_id,
+        shelf: shelf_name
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Refresh the page after the book is removed successfully
+        alert('Book removed successfully.');
+        location.reload();  // This will refresh the page
+      } else {
+        alert('Error: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+}
+	
+</script>
+
+{% endblock %}

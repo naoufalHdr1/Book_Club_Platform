@@ -1,0 +1,489 @@
+/* Sticky Header Styles */
+.sticky-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark text color */
+    padding: 1rem 2rem;
+    z-index: 1000; /* Ensure it's on top */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap; /* Prevents wrapping */
+}
+
+.sticky-header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333333; /* Dark color for logo */
+    text-decoration: none;
+}
+
+.sticky-header .btn-signup {
+    font-size: 1rem;
+    border-radius: 0; /* Rectangular button */
+    padding: 0.75rem 2rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: 2px solid #007bff; /* Border color */
+    color: #007bff; /* Text color */
+    background-color: #ffffff; /* White background */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.sticky-header .btn-signup:hover {
+    background-color: #007bff; /* Primary color on hover */
+    color: #ffffff; /* White text on hover */
+    border-color: #007bff; /* Border color on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.sticky-header .btn-signup:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Custom focus ring */
+}
+
+/* Responsive Design for Header */
+@media (max-width: 767px) {
+    .sticky-header {
+        padding: 1rem;
+    }
+
+    .sticky-header .logo {
+        font-size: 1.25rem;
+    }
+
+    .sticky-header .btn-signup {
+        font-size: 0.875rem;
+        padding: 0.5rem 1.5rem;
+    }
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wallhaven-yj7j6l.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 1.5rem;
+    overflow: hidden;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(-50px);
+    animation: slideIn 1s ease-out forwards, textShadow 1.5s ease-out forwards;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(-30px);
+    animation: slideIn 1.2s ease-out 0.5s forwards, fadeInText 1.5s ease-out 0.5s forwards;
+}
+
+.hero .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: slideIn 1.5s ease-out 1s forwards, btnPulse 1.5s ease-in-out 1s infinite;
+}
+
+.hero .btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0.8;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes textShadow {
+    from {
+        text-shadow: 0 0 0 rgba(255, 255, 255, 0.8);
+    }
+    to {
+        text-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+    }
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes btnPulse {
+    0%, 100% {
+        transform: translateY(3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+}
+
+@media (max-width: 767px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+}
+
+
+/* Features Section */
+.features {
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.features h2 {
+    font-size: 2.5rem;
+    color: #343a40;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.features .feature-card {
+    background: linear-gradient(135deg, #ffffff, #e9ecef);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.features .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.features .icon-wrapper {
+    display: inline-block;
+    padding: 0.5rem;
+    background: #007bff;
+    border-radius: 15px;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+.features .icon-wrapper i {
+    font-size: 2.5rem;
+}
+
+.features .icon-wrapper:hover {
+    background: #0056b3;
+}
+
+.features .card-body {
+    padding: 2rem;
+}
+
+.features .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.features .card-text {
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+/* Benefits Section */
+.benefits {
+    background-color: #f8f9fa; /* Light background color */
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.benefit-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.375rem; /* Rounded corners */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Deeper shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-image-wrapper img {
+    transition: transform 0.3s ease;
+}
+
+.benefit-image-wrapper:hover img {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.benefit-image-wrapper:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.benefit-title {
+    font-size: 1.75rem; /* Larger title for emphasis */
+    font-weight: 700; /* Bold title */
+    margin-bottom: 1rem;
+    color: #343a40; /* Dark text color for better contrast */
+    text-transform: uppercase; /* Uppercase for modern style */
+    letter-spacing: 0.5px; /* Slight letter spacing */
+}
+
+.benefit-description {
+    font-size: 1rem; /* Adjusted font size for readability */
+    color: #6c757d; /* Muted text color */
+    line-height: 1.6; /* Improved readability */
+    max-width: 80%; /* Limit text width for better alignment */
+    margin: 0 auto; /* Center text block */
+}
+
+@media (max-width: 767px) {
+    .benefit-description {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+}
+
+/* Testimonials and Reviews Section */
+.testimonials {
+    background-color: #f8f9fa;
+}
+
+.testimonial {
+    background: white;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.testimonial:hover {
+    transform: translateY(-10px);
+}
+
+.testimonial-text {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.rating i {
+    font-size: 1.1rem;
+}
+
+/* About Us Section */
+.about {
+    background-color: #ffffff;
+}
+
+.about img {
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.about img:hover {
+    transform: scale(1.05);
+}
+
+.about h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.about p {
+    font-size: 1rem;
+    color: #6c757d;
+    line-height: 1.7;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Enhanced Call-to-Action Section */
+.cta-section {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.6)), url('/static/books1.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    overflow: hidden;
+    z-index: 1; /* Keep content on top */
+    padding: 6rem 0;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit; /* Inherit the same background as the parent */
+    filter: blur(2px); /* Apply the blur effect */
+    z-index: -1; /* Ensure it stays behind the content */
+    background-attachment: fixed; /* Ensure the background stays fixed */
+    background-size: cover; /* Ensure the background covers the section */
+}
+
+/* Text Styling */
+.cta-section h2 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 2;
+    animation: slideInFromBottom 1s ease-out forwards;
+}
+
+.cta-section p {
+    font-size: 1.5rem;
+    color: #f0f0f0;
+    margin-bottom: 2.5rem;
+    z-index: 2;
+    animation: slideInFromBottom 1.2s ease-out forwards;
+}
+
+/* Button Design */
+.cta-btn {
+    background-color: #007bff;
+    border: none;
+    font-size: 1.2rem;
+    padding: 0.85rem 3rem;
+    transition: all 0.4s ease;
+    z-index: 2;
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4), inset 0 -3px 10px rgba(255, 255, 255, 0.3);
+    animation: slideInFromBottom 1.4s ease-out forwards;
+}
+
+.cta-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 12px 24px rgba(0, 123, 255, 0.5), inset 0 -3px 10px rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cta-section h2 {
+        font-size: 2.5rem;
+    }
+
+    .cta-section p {
+        font-size: 1.2rem;
+    }
+
+    .cta-btn {
+        font-size: 1rem;
+        padding: 0.7rem 2rem;
+    }
+}
+
+/* Footer Section */
+footer {
+    background-color: #343a40; /* Dark background */
+    color: #f8f9fa; /* Light text color */
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+}
+
+footer h5 {
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+footer p,
+footer li {
+    font-size: 0.95rem;
+}
+
+footer a {
+    color: #f8f9fa;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #adb5bd; /* Lighter color on hover */
+}
+
+.footer-social a {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-social a:hover {
+    color: #adb5bd;
+    transform: scale(1.2);
+}
+
+footer hr {
+    border-top: 1px solid #495057;
+}
+
+footer .row {
+    margin-bottom: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+    footer .col-md-4 {
+        margin-bottom: 2rem;
+    }
+}
+

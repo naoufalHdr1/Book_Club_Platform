@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white rounded-top p-4">
+                    <h2 class="fw-bold mb-0">Manage Club: {{ club.name }}</h2>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST" action="{{ url_for('club_bp.manage_club', club_id=club.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.name(class="form-control rounded-3", placeholder="Club Name") }}
+                            {{ form.name.label(class="form-label") }}
+                        </div>
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.description(class="form-control rounded-3", placeholder="Club Description", style="height: 150px") }}
+                            {{ form.description.label(class="form-label") }}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-success btn-lg shadow-sm px-5">Update Club</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light rounded-bottom p-4 d-flex justify-content-end align-items-center gap-3">
+                    <a href="{{ url_for('club_bp.view_club', club_id=club.id) }}" class="btn btn-outline-secondary btn-sm px-4">Back to Club</a>
+                    <form method="POST" action="{{ url_for('club_bp.delete_club', club_id=club.id) }}" class="mb-0">
+                        <button type="submit" class="btn btn-danger btn-sm px-4">Delete Club</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

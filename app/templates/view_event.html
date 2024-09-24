@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="fw-bold text-primary">{{ event.title }}</h2>
+                    <p class="mt-4"><strong>Description:</strong> {{ event.description }}</p>
+                    <p><strong>Start Time:</strong> {{ event.start_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p><strong>End Time:</strong> {{ event.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p><strong>Members Joined:</strong> {{ members|length }}</p>
+                    
+                    <h4 class="mt-4">Members:</h4>
+                    {% if members %}
+                        <ul class="list-group list-group-flush">
+                            {% for member in members %}
+                                <li class="list-group-item">
+                                    <i class="bi bi-person-fill text-primary me-2"></i>{{ member.user.username }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No members have joined this event yet.</p>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        {% if is_joined %}
+                            <form action="{{ url_for('club_bp.leave_event', event_id=event.id) }}" method="POST">
+                                <button type="submit" class="btn btn-danger btn-lg shadow-sm rounded-pill">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Leave Event
+                                </button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for('club_bp.join_event', event_id=event.id) }}" method="POST">
+                                <button type="submit" class="btn btn-primary btn-lg shadow-sm rounded-pill">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Join Event
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('club_bp.view_club', club_id=event.club_id ) }}" class="btn btn-outline-secondary btn-lg shadow-sm rounded-pill">
+                            <i class="bi bi-arrow-left-circle me-2"></i>Back to Clubs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+/* General Styles for Carousel */
+.carousel {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.carousel-inner {
+  padding: 0 20px;
+}
+
+.carousel-item {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+.carousel-item .card {
+  flex: 1 0 20%;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Carousel container */
+.CarouselGroup {
+  display: flex;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  scroll-snap-type: x mandatory; /* Snap to each item */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  padding: 10px;
+  gap: 20px; /* Space between items */
+}
+
+/* Carousel item styling */
+.CarouselGroup__item {
+  flex: 0 0 auto; /* Prevent items from shrinking */
+  width: 250px; /* Adjust as needed */
+  scroll-snap-align: center; /* Center items in the viewport */
+  list-style: none;
+}
+
+/* Ensure the book card is styled consistently */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Book card cover styling */
+.book-card-cover {
+  width: 100%;
+  height: 350px;
+}
+
+.book-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card:hover .book-card-cover img {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.book-card:hover .book-title {
+  text-decoration: underline;
+  transition: width 0.7s ease;
+}
+
+/* Book card content styling */
+.book-card-content {
+  padding-top: 15px;
+}
+
+/* Link styling */
+a {
+  text-decoration: none;
+}
+
+/* Title styling */
+.book-title {
+  font-size: 1.25rem; /* Slightly larger for emphasis */
+  font-weight: 600; /* Semi-bold */
+  color: #222; /* Darker color for better readability */
+  margin-bottom: 4px;
+  line-height: 1.3; /* Improved line spacing */
+}
+
+/* Author styling */
+.book-author {
+  font-size: 1rem;
+  color: #555; /* Slightly lighter than title */
+  margin-bottom: 7px;
+  line-height: 1.2; /* Improved line spacing */
+}
+
+/* Rating styling */
+.book-rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333; /* Darker text color */
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  margin-right: 10px; /* Space between stars and rating value */
+}
+
+.rating-value {
+  font-weight: 600; /* Semi-bold for emphasis */
+  color: #f39c12; /* Gold color for rating value */
+  margin-right: 5px; /* Space between rating value and count */
+}
+
+.rating-count {
+  color: #777; /* Lighter color for count */
+}
+
+.hover-shadow {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    #featured-books, #club-highlights {
+        margin-bottom: 4rem;
+    }
+    
+    #featured-books h2, #club-highlights h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #343a40;
+    }
+    
+    .book-grid, .club-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .book-card, .club-card {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .book-card:hover, .club-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .book-card img, .club-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1rem 1rem 0 0;
+    }
+
+    .book-card .card-body, .club-card .card-body {
+        padding: 1rem;
+    }
+
+    .club-card .card-body {
+        min-height: 210px; /* Set a minimum height for the card body */
+    }
+
+    .book-card .card-title, .club-card .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: .75rem;
+        color: #212529;
+        text-transform: capitalize;
+    }
+
+    .book-card .card-text, .club-card .card-text {
+        color: #6c757d;
+        line-height: 1.6;
+    }
+
+    .carousel-item {
+        margin-top: 1rem;
+    }
+
+    .carousel-item img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: #000;
+        border-radius: 50%;
+    }
+
+    .card-text.long-description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .show-more-btn {
+        color: #007bff;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .club-card .show-more-btn:hover {
+        text-decoration: underline;
+    }
+
+    .club-stats {
+        display: flex;
+        justify-content: space-evenly;
+        color: #495057;
+        font-size: 0.9rem;
+        margin-top: auto; /* Ensure stats are at the bottom */
+    }
+
+    .club-stats .stat-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .club-stats .stat-item i {
+        margin-right: 0.5rem;
+        color: #007bff;
+    }
+
+    /* Ensure that the card heights are equal */
+    .club-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+        .club-stats {
+            flex-direction: column;
+            justify-items: space-evenly;
+            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .stat-item {
+            margin-top: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Featured Books -->
+    <section id="featured-books" class="container py-5">
+        <h2 class="text-center mb-4">Featured Books</h2>
+        <hr>
+  <!-- Carousel Wrapper -->
+  <div id="booksCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Carousel inner -->
+    <ul class="CarouselGroup" data-testid="items">
+      {% for book in featured_books %}
+      <li class="CarouselGroup__item">
+        <div class="book-card">
+          <a class="BookCard__clickCardTarget BookCard__interactive BookCard__block" href="{{ url_for('club_bp.view_book', book_id=book.book_id) }}" tabindex="0">
+            <div class="book-card-cover">
+              <img src="{{ book.thumbnail }}" alt="Book Cover">
+            </div>
+            <div class="book-card-content">
+              <div class="book-title">{{ book.title }}</div>
+              <div class="book-author">{{ book.author }}</div>
+              <div class="book-rating">
+                <div class="rating-stars">
+                  <!-- Add stars SVG or icon here -->
+                </div>
+                <div class="rating-value">{{ book.rating }}</div>
+                <div class="rating-count">{{ book.rating_count }}</div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+    </section>
+
+        <!-- Club Highlights Section -->
+    <section id="club-highlights" class="container py-5">
+        <h2 class="text-center mb-4">Club Highlights</h2>
+	<hr>
+        {% if featured_clubs and featured_clubs|length > 0 %}
+            <div class="club-grid">
+                {% for club in featured_clubs %}
+                    <a href="{{ url_for('main.view_club', club_id=club.id) }}" class="text-decoration-none text-dark">
+                        <div class="club-card card">
+                            {% if club.logo_url %}
+                                <img src="{{ club.club_img }}" class="card-img-top" alt="{{ club.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ club.name }}</h5>
+                                <hr>
+                                <p class="card-text {% if club.description|length > 150 %}long-description{% endif %}">
+                                    {{ club.description }}
+                                </p>
+                                {% if club.description|length > 150 %}
+                                    <span class="show-more-btn" onclick="toggleDescription(event, this)">Show more</span>
+                                {% endif %}
+                            </div>
+                            <div class="club-stats">
+                                <div class="stat-item">
+                                    <i class="bi bi-people"></i> {{ club.memberships|length }} Members
+                                </div>
+                                <div class="stat-item">
+                                    <i class="bi bi-calendar-event"></i> {{ club.events|length }} Events
+                                </div>
+                                <div class="stat-item">
+                                    <i class="bi bi-chat-dots"></i>0 Discussions
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">No clubs available.</p>
+        {% endif %}
+    </section>
+    
+    <script>
+        function toggleDescription(event, element) {
+            // Prevent the click event from propagating to the parent <a> tag
+	    event.preventDefault();
+ 	    event.stopPropagation();
+
+            var cardText = element.previousElementSibling;
+            if (cardText.classList.contains('long-description')) {
+                cardText.classList.remove('long-description');
+                element.innerHTML = "Show less";
+            } else {
+                cardText.classList.add('long-description');
+                element.innerHTML = "Show more";
+            }
+        }
+    </script>
+{% endblock %}
+

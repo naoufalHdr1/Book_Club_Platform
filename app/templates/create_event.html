@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow-lg border-0 rounded-4">
+		    <div class="p-4 text-center bg-light border-bottom">
+		    <h1 class="fw-bold mb-0 text-primary">Create New Event</h1>
+		    <br>
+                    <p class="mb-0">Fill out the form below to plan your event</p>
+		    </div>
+                <div class="card-body p-5">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.name(class="form-control rounded-3", placeholder="Event Title") }}
+                            {{ form.name.label(class="form-label") }}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.description(class="form-control rounded-3", placeholder="Event Description", style="height: 150px") }}
+                            {{ form.description.label(class="form-label") }}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.start_time(class="form-control rounded-3", placeholder="Start Time", id="datepicker") }}
+                            {{ form.start_time.label(class="form-label") }}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.end_time(class="form-control rounded-3", placeholder="End Time", id="datepicker") }}
+                            {{ form.end_time.label(class="form-label") }}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-success btn-lg shadow-lg px-4">Create Event</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light rounded-bottom p-4 d-flex justify-content-end">
+                    <a href="{{ url_for('main.view_club', club_id=club.id) }}" class="btn btn-secondary btn-sm px-4"><i class="bi bi-arrow-left-circle"></i> Back to Club</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#datepicker", {
+            dateFormat: "Y-m-d", // Matches the format in FlaskForm
+            enableTime: false,   // Set to true if you want to allow time picking
+            altInput: true,
+            altFormat: "F j, Y", // Display format for users
+        });
+    });
+</script>
+
+{% endblock %}

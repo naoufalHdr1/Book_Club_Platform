@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="p-4 text-center bg-light border-bottom">
+                    <h1 class="fw-bold mb-0 text-primary">Create New Club</h1>
+		    <br>
+                    <p class="mb-0">Fill out the form below to create a club</p>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="form-floating mb-4">
+                            {{ form.name(class="form-control rounded-3", placeholder="Club Name")}}
+                            {{ form.name.label(class="form-label") }}
+                        </div>
+
+		        <div class="form-group mb-4">
+            		    {{ form.category.label(class="form-label") }}
+            		    {{ form.category(class="form-select") }}
+        		</div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.profile_picture(class="form-control rounded-3", placeholder="Profile Picture") }}
+                            {{ form.profile_picture.label(class="form-label") }}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.description(class="form-control rounded-3", placeholder="Description Content", style="height: 200px") }}
+                            {{ form.description.label(class="form-label") }}
+                        </div>
+
+                        <div class="d-grid gap-2 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-primary btn-lg shadow-lg px-4">Create Club</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light rounded-bottom p-4 d-flex justify-content-end">
+                    <a href="{{ url_for('club_bp.view_clubs') }}" class="btn btn-secondary btn-sm px-4">
+                        <i class="bi bi-arrow-left-circle"></i> Back to Clubs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

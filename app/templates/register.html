@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="p-4 text-center bg-light border-bottom">
+                    <h1 class="fw-bold mb-0 text-primary">Register</h1>
+		    <br>
+                    <p class="mb-0">Create a new account by filling out the form below</p>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+
+                        <div class="form-floating mb-4">
+                            {{ form.username(class="form-control rounded-3", placeholder="Username") }}
+                            {{ form.username.label(class="form-label") }}
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.email(class="form-control rounded-3", placeholder="Email") }}
+                            {{ form.email.label(class="form-label") }}
+                            {% for error in form.email.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.password(class="form-control rounded-3", placeholder="Password") }}
+                            {{ form.password.label(class="form-label") }}
+                            {% for error in form.password.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.password2(class="form-control rounded-3", placeholder="Confirm Password") }}
+                            {{ form.password2.label(class="form-label") }}
+                            {% for error in form.password2.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid d-flex justify-content-end">
+                            {{ form.submit(class="btn btn-outline-primary btn-lg shadow-lg px-5") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-light rounded-bottom p-4">
+                    <p class="mb-0">Already have an account? <a href="{{ url_for('main.login') }}" class="text-primary fw-bold">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

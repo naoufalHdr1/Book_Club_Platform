@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="p-4 text-center bg-light border-bottom">
+                    <h1 class="fw-bold mb-0 text-primary">Create New Discussion</h1>
+                    <br>
+                    <p class="mb-0">Share your thoughts and start a new conversation</p>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.title(class="form-control rounded-3", placeholder="Discussion Title") }}
+                            {{ form.title.label(class="form-label") }}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.content(class="form-control rounded-3", placeholder="Discussion Content", style="height: 200px") }}
+                            {{ form.content.label(class="form-label") }}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-success btn-lg shadow-lg px-5">Create Discussion</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light rounded-bottom p-4 d-flex justify-content-end">
+                    <a href="{{ url_for('club_bp.view_club', club_id=club.id) }}" class="btn btn-secondary btn-sm px-4"><i class="bi bi-arrow-left-circle"></i> Back to Club</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

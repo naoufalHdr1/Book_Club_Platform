@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-light text-center py-4">
+                    <h1 class="fw-bold mb-0 text-primary">Edit Profile</h1>
+		    <br>
+		    <p class="mb-0">Update the details of the profile below</p>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="form-group mb-4">
+                            <label for="bio" class="form-label fw-semibold">Bio</label>
+                            {{ form.bio(class="form-control rounded-3", rows=5, placeholder="Tell us about yourself...") }}
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="profile_picture" class="form-label fw-semibold">Profile Picture</label>
+                            {{ form.profile_picture(class="form-control rounded-3") }}
+                        </div>
+
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg shadow-sm rounded-pill") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

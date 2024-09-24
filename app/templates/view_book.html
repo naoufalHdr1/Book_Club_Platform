@@ -1,0 +1,865 @@
+{% extends "base.html" %}
+
+{% block style %}
+/* Advanced Show More Button Styling */
+#show-more-btn {
+  display: inline-block;
+  color: white;
+  background: linear-gradient(135deg, #4a90e2, #8ab6d6); /* Slightly blueish gradient */
+  padding: 0.5rem 1.2rem; /* Smaller padding */
+  border-radius: 5px; /* Rectangular corners */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3); /* Softer shadow */
+}
+
+#show-more-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #8ab6d6, #4a90e2); /* Inverted blueish gradient */
+  z-index: -1;
+  transition: transform 0.4s ease;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+#show-more-btn:hover::before {
+  transform: scaleX(1);
+}
+
+#show-more-btn:hover {
+  color: #fff;
+  box-shadow: 0 12px 20px rgba(74, 144, 226, 0.4);
+  transform: translateY(-3px);
+}
+
+#show-more-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+}
+
+.edition-card {
+  margin-top: 20px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* XSmall screens */
+@media (max-width: 576px) {
+   .book-image {
+       max-width : 327px;
+       max-height: 551px;
+   }
+   .card-body-1 {
+     overflow: auto;
+   }
+}
+
+/* Small screens and up */
+@media (min-width: 576px) {
+   .book-image {
+       width : 390px;
+       height: 505px;
+   }
+}
+
+/* Medium screens and up */
+@media (min-width: 768px) {
+   .book-image {
+       width: auto;
+       height: 330px;
+   }
+  /* Fixed Positioning for Book Image and Edition */
+  .fixed-section {
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    height: 100%;
+  }
+  .genre-scroll .badge {
+    white-space: normal; /* Allow text to wrap */
+    text-align: left;
+  }
+}
+
+/* Large screens and up */
+@media (min-width: 992px) {
+   .book-image {
+       height: 415px;
+   }
+}
+
+/* XLarge screens and up */
+@media (min-width: 1200px) {
+   .book-image {
+       height: 550px;
+   }
+}
+
+/* Review Section Styles */
+.rating {
+    direction: ltr;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.rating input[type="radio"] {
+    display: none;
+}
+
+.rating label {
+    color: #ccc;
+    transition: color 0.3s ease;
+}
+
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input[type="radio"]:checked ~ label {
+    color: #f39c12;
+}
+
+.rating label:active {
+    transform: scale(1.2);
+}
+
+.genre-scroll {
+    overflow: auto; /* Still allows scrolling */
+    padding: 5px 10px;
+    margin-bottom: 20px;
+}
+
+.genre-scroll .badge {
+    margin: 5px 0;
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-size: 0.75rem;
+    color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.4s ease, transform 0.3s ease;
+}
+
+.genre-scroll .badge:hover {
+    background-color: rgba(47, 93, 150, 0.9);
+    transform: translateY(-1.2px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Hide scrollbar for Google Chrome and Safari */
+.genre-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.genre-scroll {
+    scrollbar-width: none;
+}
+
+.genre-scroll p{
+    background-color: rgb(99 159 221);
+}
+
+/* General Styles for Carousel */
+.carousel {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.carousel-inner {
+  padding: 0 20px;
+}
+
+.carousel-item {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+.carousel-item .card {
+  flex: 1 0 20%;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Carousel container */
+.CarouselGroup {
+  display: flex;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  scroll-snap-type: x mandatory; /* Snap to each item */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  padding: 10px;
+  gap: 20px; /* Space between items */
+}
+
+/* Carousel item styling */
+.CarouselGroup__item {
+  flex: 0 0 auto; /* Prevent items from shrinking */
+  width: 250px; /* Adjust as needed */
+  scroll-snap-align: center; /* Center items in the viewport */
+  list-style: none;
+}
+
+/* Ensure the book card is styled consistently */
+.r-book-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Book card cover styling */
+.book-card-cover {
+  width: 100%;
+  height: 350px;
+}
+
+.book-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.r-book-card:hover .book-card-cover img {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.r-book-card:hover .book-title {
+  text-decoration: underline;
+  transition: width 0.7s ease;
+}
+
+/* Book card content styling */
+.book-card-content {
+  padding-top: 15px;
+}
+
+/* Link styling */
+a {
+  text-decoration: none;
+}
+
+/* Title styling */
+.book-title {
+  font-size: 1.25rem; /* Slightly larger for emphasis */
+  font-weight: 600; /* Semi-bold */
+  color: #222; /* Darker color for better readability */
+  margin-bottom: 4px;
+  line-height: 1.3; /* Improved line spacing */
+}
+
+/* Author styling */
+.book-author {
+  font-size: 1rem;
+  color: #555; /* Slightly lighter than title */
+  margin-bottom: 7px;
+  line-height: 1.2; /* Improved line spacing */
+}
+
+/* Rating styling */
+.book-rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333; /* Darker text color */
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  margin-right: 10px; /* Space between stars and rating value */
+}
+
+.rating-value {
+  font-weight: 600; /* Semi-bold for emphasis */
+  color: #f39c12; /* Gold color for rating value */
+  margin-right: 5px; /* Space between rating value and count */
+}
+
+.rating-count {
+  color: #777; /* Lighter color for count */
+}
+
+.hover-shadow {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.list-group-item {
+  border-style: none;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.btn-check {
+  display: none; /* Hide the default checkbox */
+}
+
+.modal .btn {
+  margin: 0 5px;
+  border-radius: 0.375rem;
+  padding: 0.50rem 1.12rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.label-btn {
+  color: #000;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.label-btn:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05); /* Slightly enlarge on hover */
+  transition: all 0.3s ease;
+}
+
+.label-btn:active {
+  background-color: #00BFFF; /* Deep sky blue for active */
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(0.98); /* Slightly reduce size on active */
+}
+
+.card:hover {
+}
+
+/* Specifically target the hover-shadow class inside the card */
+.hover-shadow:hover {
+  transform: translateY(-4px);
+}
+
+.list-group-item {
+  border-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.btn-check {
+  display: none;
+}
+
+.modal .btn {
+  margin: 0 5px;
+  border-radius: 0.375rem;
+  padding: 0.50rem 1.12rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.label-btn:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+.label-btn:active {
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(0.98);
+}
+
+.icon-link {
+  color: black;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  font-family: Arial, sans-serif; /* Ensure consistent font family */
+}
+
+.icon-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1.5px;
+  background-color: red;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.icon-link:hover::after {
+  width: 100%;
+  background-color: red;
+}
+
+.icon-link:hover {
+  color: red;
+}
+
+.icon-link i {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.icon-link:hover i {
+  transform: translateY(-4px); /* Move the icon up */
+}
+
+#modalButton{{ book['id'] }} {
+  width : 100%;
+}
+
+#book-description {
+  white-space: pre-wrap; /* Preserves newlines and wraps text */
+}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+  <div class="row gx-md-3 gx-lg-4">
+    <!-- Book Image Section -->
+    <div class="test col-12 col-md-4 mb-4 d-flex justify-content-center d-md-block fixed-section">
+      <!-- Book image -->
+    <div class="d-block">
+      <div class="card shadow-lg mb-4">
+        {% set thumbnail_url = book['volumeInfo'].get('imageLinks', {}).get('thumbnail', '/static/default-book-cover.jpg') %}
+        {% if thumbnail_url.startswith('http://') %}
+          {% set thumbnail_url = thumbnail_url.replace('http://', 'https://').replace('&zoom=1', '&zoom=3') %}
+        {% endif %}
+        <img src="{{ thumbnail_url }}" alt="{{ book['volumeInfo']['title'] }}" class="card-img-top book-image">
+      </div>
+
+      <!-- Modal Button -->
+      <div class="shadow-lg mb-3">
+        <div class="d-flex justify-content-center">
+          <!-- Use data-book-found to indicate if the book is found in the shelf -->
+          {% set book_found = book['id'] | find_bookshelf(bookshelves) %}
+          <button id="modalButton{{ book['id'] }}" type="button" class="btn btn-lg shadow-lg px-5 {% if book_found %}btn-success{% else %}btn-outline-primary{% endif %}" data-bs-toggle="modal" data-bs-target="#shelfModal{{ book['id'] }}" data-book-id="{{ book['id'] }}" data-book-found="{{ 'true' if book_found else 'false' }}">
+            <i class="bi {% if book_found %}bi-bookmark-check-fill{% else %}bi-bookmark-plus{% endif %}"></i> {{ book_found if book_found else 'Add Book' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+      <!-- Edition -->
+      <div class="card d-none d-md-block">
+        <div class="card-body p-4">
+          <h2 class="text-muted fs-3">This edition:</h2>
+	  <hr>
+          <p class="text-muted fs-6"><strong>Publisher: </strong>
+            {{ book['volumeInfo'].get('publisher', 'Unknown publisher') }}
+          </p>
+          <p class="text-muted fs-6"><strong>Published Date: </strong>
+            {{ book['volumeInfo'].get('publishedDate', 'Unknown') }}
+          </p>
+          <p class="text-muted fs-6"><strong>Page Count: </strong>
+            {{ book['volumeInfo'].get('pageCount', 'Unknown') }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book Details Section -->
+    <div class="col-md-8 mb-3">
+      <div class="row">
+        <div class="col-12 mb-5">
+          <div class="card-1 shadow-lg border-0 d-flex align-items-center">
+            <div class="card-body-1 p-4 p-lg-5">
+              <h1 class="display-4 fw-bold text-primary mb-4">{{ book['volumeInfo']['title'] }}</h1>
+	      <hr>
+              <p class="text-muted fs-3"><i class="bi bi-person"></i>
+                {% for author in book['volumeInfo'].get('authors', []) %}
+                  {{ author }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+              </p>
+    	      <div class="d-block d-md-none">
+                <p class="text-muted fs-6"><strong>Publisher: </strong>
+                  {{ book['volumeInfo'].get('publisher', 'Unknown publisher') }}
+                </p>
+                <p class="text-muted fs-6"><strong>Publishe Date: </strong>
+                  {{ book['volumeInfo'].get('publishedDate', 'Unknown') }}
+                </p>
+                <p class="text-muted fs-6"><strong>Page Count: </strong>
+                  {{ book['volumeInfo'].get('PageCount', 'Unknown') }}
+                </p>
+              </div>
+              <p class="text-muted fs-6"><strong>Genre: </strong>
+	      <div class="genre-scroll">
+		      {% for category in book['volumeInfo'].get('categories') %}
+	          <p class="badge">{{ category }}</p>
+                {% endfor %}
+	      </div>
+              <!-- Description with Show More -->
+	      <p class="lead" id="book-description"></p>
+	      {% if clean_desc|length > 300 %}
+	        <button class="btn" id="show-more-btn" onclick="toggleDescription()">Show More</button>
+	      {% endif %}
+            </div>
+          </div>
+        </div>
+
+	<!-- Reviews Section -->
+        <div class="col-12 mb-3">
+          <section class="mb-3">
+          <!-- Reviews Section -->
+            <div class="d-flex justify-content-between align-items-center m-1 mb-3">
+              <h2 class="text-muted fs-3 px-4">Reviews</h2>
+                {% if current_user.is_authenticated %}
+                  <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#reviewForm" aria-expanded="false" aria-controls="reviewForm">
+                  Leave a Review
+                  </button>
+                {% endif %}
+            </div>
+
+              {% if reviews %}
+                <div class="list-group">
+                  {% for review in reviews %}
+                    <div class="list-group-item list-group-item-action border-0 shadow-sm mb-3 rounded">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-warning">
+                          {% for i in range(1, 6) %}
+                            {% if i <= review.rating %}
+                              <i class="bi bi-star-fill"></i>
+                            {% else %}
+                              <i class="bi bi-star"></i>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                        <span class="text-muted small"><i class="bi bi-person-circle"></i>
+			  {{ review.author.username }} - {{ review.created_at }}
+			</span>
+                      </div>
+                      <p class="mt-3">{{ review.content }}</p>
+                    </div>
+                  {% endfor %}
+                </div>
+ 
+	        <!-- Pagination Controls -->
+              {% else %}
+                <p class="text-muted px-5">No reviews yet. Be the first to review this book!</p>
+              {% endif %}
+          </section>
+
+          {% if current_user.is_authenticated %}
+           <!-- Leave a Review Form -->
+            <div class="collapse" id="reviewForm">
+              <div class="card card-body border-0 shadow-lg p-4 position-relative">
+              <!-- Close Button -->
+                <button type="button" class="btn-close position-absolute top-0 end-0 p-3" data-bs-toggle="collapse" data-bs-target="#reviewForm" aria-label="Close"></button>
+
+                <h3 class="h5 fw-bold text-secondary mb-4">Leave a Review</h3>
+                <form method="POST">
+                  {{ form.hidden_tag() }}
+                  <div class="form-floating mb-3">
+                    {{ form.content(class="form-control rounded-3", placeholder="write your review...") }}
+                    {{ form.content.label(class="form-label") }}
+                  </div>
+                  <div class="form-group mb-4">
+                    <label for="rating" class="form-label">Rating</label>
+                    <div id="rating" class="star-rating rating">
+                      {% for i in range(5, 0, -1) %}
+                        <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" class="visually-hidden" {% if form.rating.data == i %}checked{% endif %}>
+                        <label for="rating{{ i }}" class="bi bi-star text-warning fs-3"></label>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  {{ form.submit(class="btn btn-primary btn-lg w-100 shadow-sm") }}
+                </form>
+              </div>
+            </div>
+          {% else %}
+            <div class="alert mt-3">
+              <p>You need to <a href="{{ url_for('main.login') }}" class="">login</a> to leave a review.</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Related Books Section -->
+        <div class="col-12">
+              <h2 class="text-muted fs-3 p-4">Related Books</h2>
+              {% if related_books %}
+	      <!-- Carousel Wrapper -->
+                <div id="booksCarousel" class="carousel slide" data-bs-ride="carousel">
+                  <!-- Carousel inner -->
+                  <ul class="CarouselGroup" data-testid="items">
+                    {% for book in related_books %}
+                      <li class="CarouselGroup__item genre-scroll">
+                        <div class="r-book-card">
+                          <a class="BookCard__clickCardTarget BookCard__interactive BookCard__block" href="{{ url_for('club_bp.view_book', book_id=book['id']) }}" tabindex="0">
+                            <div class="book-card-cover">
+		              {% set r_thumbnail_url = book['volumeInfo'].get('imageLinks', {}).get('thumbnail', '/static/default-book-cover.jpg') %}
+                              {% if r_thumbnail_url.startswith('http://') %}
+                                {% set r_thumbnail_url = r_thumbnail_url.replace('http://', 'https://') %}
+                              {% endif %}
+			      <img src="{{ r_thumbnail_url }}" alt="{{ book['volumeInfo'].get('title') }}">
+                            </div>
+                            <div class="book-card-content">
+                              <div class="book-title">
+			        {{ book['volumeInfo'].get('title') }}
+			      </div>
+                              <div class="book-author">
+			        <p class="text-muted medium mb-0" style="background-color: white;"><i class="bi bi-person"></i>
+                                  {% for author in book['volumeInfo'].get('authors', ['Unknown Author']) %}
+                                    {{ author }}{% if not loop.last %}, {% endif %}
+                                  {% endfor %}
+              			</p>
+		   	      </div>
+                              <div class="book-rating">
+                                <div class="rating-stars">
+				  <i class="bi bi-star-fill text-warning fs-3"></i>
+                                </div>
+                                <div class="rating-value">
+			          {{ book['volumeInfo'].get('rating', '4.3') }}
+			        </div>
+                                <div class="rating-count">
+			  	  {{ book['volumeInfo'].get('count', '26.4K') }}
+			        </div>
+              		      </div>
+                            </div>
+                          </a>
+                        </div>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+	      {% else %}
+                <p class="text-muted px-5">No Related Books Found!</p>
+              {% endif %}
+	    </div>
+      </div>
+    </div>
+      <!-- Modal -->
+      <div class="modal fade" id="shelfModal{{ book['id'] }}" tabindex="-1" aria-labelledby="shelfModalLabel{{ book['id'] }}" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title fs-3 fw-bold text-primary" id="shelfModalLabel{{ book['id'] }}">Choose a Shelf</h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Custom Modal Body -->
+            <div class="modal-body m-3">
+              <p>Select a shelf for this book. You can change your selection anytime.</p>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-center">
+		<input type="radio" class="btn-check" name="btnradio{{ book['id'] }}" id="btn-radio-1{{ book['id'] }}" value="Want to Read" autocomplete="off" {% if book_found == "Want to Read" %}checked{% endif %}>
+                  <label class="btn label-btn btn-sm mx-2" for="btn-radio-1{{ book['id'] }}">Want to Read</label>
+                  <input type="radio" class="btn-check" name="btnradio{{ book['id'] }}" id="btn-radio-2{{ book['id'] }}" value="Currently Reading" autocomplete="off" {% if book_found == "Currently Reading" %}checked{% endif %}>
+                  <label class="btn label-btn btn-sm mx-2" for="btn-radio-2{{ book['id'] }}">Currently Reading</label>
+                  <input type="radio" class="btn-check" name="btnradio{{ book['id'] }}" id="btn-radio-3{{ book['id'] }}" value="Read" autocomplete="off" {% if book_found == "Read" %}checked{% endif %}>
+                  <label class="btn label-btn btn-sm mx-2" for="btn-radio-3{{ book['id'] }}">Read</label>
+                </li>
+              </ul>
+              <div class="d-flex justify-content-center mt-3">
+	        {% if book_found %}
+                  <a id="removeShelfButton{{ book['id'] }}" class="icon-link" style="display: inline-block;">
+		{% else %}
+                  <a id="removeShelfButton{{ book['id'] }}" class="icon-link" style="display: none">
+		{% endif %}
+                    <i class="bi bi-trash fs-5" aria-hidden="true"></i> Remove from my shelf
+                  </a>
+              </div>
+            </div>
+
+            <!-- Custom Modal Footer -->
+            <div class="modal-footer bg-light">
+              <button id="saveChanges{{ book['id'] }}" type="button" class="btn btn-outline-primary btn-md shadow-lg px-3 save-changes" data-book-id="{{ book['id'] }}">
+                <i class="bi bi-download"></i> Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<script>
+  const fullDescription = {{ clean_desc|tojson }};
+  const shortDescription = fullDescription.slice(0, 300) + (fullDescription.length > 300 ? "..." : "");
+
+  function toggleDescription() {
+    const desc = document.getElementById('book-description');
+    const btn = document.getElementById('show-more-btn');
+    if (btn.textContent === 'Show More') {
+      desc.textContent = fullDescription;
+      btn.textContent = 'Show Less';
+    } else {
+      desc.textContent = shortDescription;
+      btn.textContent = 'Show More';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const desc = document.getElementById('book-description');
+    desc.textContent = shortDescription; // Ensure the short description is set initially
+  });
+      document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.star-rating label');
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const ratingValue = this.htmlFor.replace('rating', '');
+                highlightStars(ratingValue);
+            });
+
+            star.addEventListener('click', function () {
+                const ratingInput = document.getElementById(this.htmlFor);
+                ratingInput.checked = true;
+            });
+        });
+
+        function highlightStars(ratingValue) {
+            stars.forEach(star => {
+                if (star.htmlFor.replace('rating', '') <= ratingValue) {
+                    star.classList.replace('bi-star', 'bi-star-fill');
+                } else {
+                    star.classList.replace('bi-star-fill', 'bi-star');
+                }
+            });
+        }
+    });
+
+// Handle "Save Changes" functionality
+document.querySelectorAll('.save-changes').forEach(button => {
+  button.addEventListener('click', function() {
+    let bookId = this.getAttribute('data-book-id');
+    let selectedOption = document.querySelector(`input[name="btnradio${bookId}"]:checked`);
+
+    if (selectedOption) {
+      let modalButton = document.getElementById('modalButton' + bookId);
+      let removeButton = document.getElementById('removeShelfButton' + bookId);
+
+      if (modalButton) {
+        modalButton.innerHTML = `<i class="bi bi-bookmark-check-fill"></i> ${selectedOption.value}`;
+        modalButton.classList.remove('btn-outline-primary');
+        modalButton.classList.add('btn-success');
+
+        if (removeButton) {
+          removeButton.style.display = 'inline-block';
+        }
+
+        // Close the modal
+        let modalInstance = bootstrap.Modal.getInstance(document.getElementById('shelfModal' + bookId));
+        if (modalInstance) {
+          modalInstance.hide();
+        }
+
+        // Make a POST request to update the shelf
+        fetch('/add-to-shelf', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            book_id: bookId,
+            shelf: selectedOption.value
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Success handling can be added here if needed
+          } else {
+            // Error handling can be added here if needed
+          }
+        })
+        .catch(error => {
+          // Error handling can be added here if needed
+        });
+      }
+    } else {
+      alert('Please select a shelf option.');
+    }
+  });
+});
+
+// Handle "Remove from my shelf" functionality
+document.querySelectorAll('.icon-link').forEach(removeButton => {
+  removeButton.addEventListener('click', function() {
+    let bookId = this.getAttribute('id').replace('removeShelfButton', '');
+    let selectedShelf = document.querySelector(`input[name="btnradio${bookId}"]:checked`);
+
+    if (selectedShelf) {
+      selectedShelf = selectedShelf.value;
+    } else {
+      // Handle case where no shelf is selected
+      alert('No shelf selected.');
+      return;
+    }
+
+    let modalButton = document.getElementById('modalButton' + bookId);
+    let removeButtonElement = document.getElementById('removeShelfButton' + bookId);
+
+    if (modalButton) {
+      // Reset the button text to "Add Book"
+      modalButton.innerHTML = `<i class="bi bi-bookmark-plus"></i> Add Book`;
+      modalButton.classList.remove('btn-success');
+      modalButton.classList.add('btn-outline-primary');
+
+      if (removeButtonElement) {
+        // Hide the "Remove from my shelf" button
+        removeButtonElement.style.display = 'none';
+      }
+
+      // Close the modal
+      let modalInstance = bootstrap.Modal.getInstance(document.getElementById('shelfModal' + bookId));
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+
+      // Make a POST request to remove the book from the shelf
+      fetch('/remove-from-shelf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          book_id: bookId,
+          shelf: selectedShelf
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Success handling can be added here if needed
+        } else {
+          // Error handling can be added here if needed
+        }
+      })
+      .catch(error => {
+        // Error handling can be added here if needed
+      });
+    }
+  });
+});
+
+
+
+</script>
+{% endblock %}
