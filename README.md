@@ -171,7 +171,10 @@ Users can submit reviews and rate books they've read.
 
 ## Screenshots
 
+### View book page:
 ![Screenshot of the application](screenshots/screenshot1.png)
+
+### View book-club page:
 ![Screenshot of the application](screenshots/screenshot2.png)
 
 ## Future Improvements
