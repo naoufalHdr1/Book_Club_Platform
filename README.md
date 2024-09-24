@@ -171,7 +171,8 @@ Users can submit reviews and rate books they've read.
 
 ## Screenshots
 
-_Include screenshots or GIFs to illustrate the app's UI and functionality._
+![Screenshot of the application](screenshots/screenshot1.png)
+![Screenshot of the application](screenshots/screenshot2.png)
 
 ## Future Improvements
 
