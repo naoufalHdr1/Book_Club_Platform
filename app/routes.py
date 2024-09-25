@@ -279,6 +279,17 @@ def create_event(club_id):
 
     return render_template('create_event.html', form=form, club=club)
 
+@main.route('/club/event/<int:event_id>/delete', methods=['POST'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    if current_user != event.user and not current_user.is_admin:
+        abort(403)  # Forbidden access
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event has been deleted.', 'success')
+    return redirect(url_for('main.view_club', club_id=event.club_id))
+
 @main.route('/club/event/<int:event_id>/join', methods=['POST'])
 @login_required
 def join_event(event_id):
@@ -301,7 +312,7 @@ def leave_event(event_id):
         flash('You have left the event.', 'info')
     else:
         flash('You are not part of this event.', 'warning')
-    return redirect(url_for('main.view_event', event_id=event_id))
+    return redirect(url_for('main.view_club', club_id=event.club_id))
 
 @main.route('/club/<int:club_id>/discussions', methods=['POST'])
 def create_discussion(club_id):
